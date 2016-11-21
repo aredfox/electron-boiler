@@ -41,9 +41,7 @@ gulp.task(TASK_CLEAN, cb => {
 });
 const TASK_CLEAN_BUILD_DIR = `${TASK_CLEAN}:build`;
 gulp.task(TASK_CLEAN_BUILD_DIR, cb => {
-    const dirglob = [
-        `app/**/*`        
-    ];
+    const dirglob = `${BUILD_DIR}/**/*`;
     log(`Will now clean with glob '${dirglob}'.`);
     return del([
         `${dirglob}`,
