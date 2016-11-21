@@ -20,7 +20,7 @@ const SOURCE_LIB_DIR = path.resolve('./src/lib');
 const SOURCE_STYLES_DIR = path.resolve('./src/styles');
 const BUILD_DIR = path.resolve('./app');
 const BUILD_DATA_DIR = path.resolve('./app/data');
-const BUILD_CONFIG_DIR = path.resolve('/app/data/config');
+const BUILD_CONFIG_DIR = path.resolve('./app/data/config');
 /* ******************************************************************** */
 /* FILE IMPORTS */
 const packagejson = require('./package.json');
@@ -44,7 +44,7 @@ gulp.task(TASK_COPY_CONFIG, cb => {
     return gulp
         .src(configFilePath)
         .pipe(rename('config.json'))
-        .pipe(gulp.dest(`./${BUILD_CONFIG_DIR}`));
+        .pipe(gulp.dest(`${BUILD_CONFIG_DIR}`));        
 });
 /*/********************************************************************///
 /*///*/
