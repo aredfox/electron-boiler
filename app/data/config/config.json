@@ -1,5 +1,13 @@
 {
-    "environment": {
-        "name": "development"
-    }
+	"build": {
+		"environment": {
+			"name": "development",
+			"machine": {
+				"id": "win32:Windows_NT:PSYAVIAHPC",
+				"number": "2fda50f0d20e686418d3973f08bf887d"
+			}
+		},
+		"number": "20161121235302",
+		"timestamp": "2016-11-21T23:53:02+01:00"
+	}
 }

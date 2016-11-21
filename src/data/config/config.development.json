@@ -1,5 +1,7 @@
 {
-    "environment": {
-        "name": "development"
+    "build": {
+        "environment": {
+            "name": "development"
+        }
     }
 }

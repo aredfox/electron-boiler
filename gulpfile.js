@@ -1,11 +1,14 @@
 /* ******************************************************************** */
 /* MODULE IMPORTS */
 const gulp = require('gulp');
+const os = require('os');
+const md5 = require('md5');
 const path = require('path');
 const moment = require('moment');
 const del = require('del');
 const ignore = require('gulp-ignore');
 const rename = require('gulp-rename');
+const json = require('gulp-json-editor');
 const runSequence = require('run-sequence');
 const argv = require('yargs').argv;
 const colors = require('colors/safe');
@@ -40,10 +43,25 @@ const TASK_COPY_CONFIG = `${TASK_COPY}:config`;
 gulp.task(TASK_COPY_CONFIG, cb => {
     const configFileName = `config.${getEnvironmentName().toLowerCase()}.json`;
     const configFilePath = path.resolve(`${SOURCE_CONFIG_DIR}/${configFileName}`);
+    const buildTimestamp = moment();    
+    const buildNumber = buildTimestamp.format('YYYYMMDDHHmmss');  
+    const machine = `${os.platform()}:${os.type()}:${os.hostname()}`;  
+    logInfo(`Will grab config file '${configFileName}' and inject build parameters: buildNumber '${buildNumber}' / buildTimestamp '${buildTimestamp.format()}' / machine '${machine}'.`);    
     logInfo(`Will grab config file '${configFileName}' as source and output as config.json in '${BUILD_CONFIG_DIR}'.`);
     return gulp
         .src(configFilePath)
         .pipe(rename('config.json'))
+        .pipe(json(json => {
+            json.build.number = buildNumber;
+            json.build.timestamp = buildTimestamp.format();
+            json.build.environment.machine = {};
+            json.build.environment.machine.id = machine;
+            json.build.environment.machine.number = md5(machine);
+            return json;
+        }, {
+            'indent_char': '\t',
+            'indent_size': 1
+        }))
         .pipe(gulp.dest(`${BUILD_CONFIG_DIR}`));        
 });
 /*/********************************************************************///
