@@ -44,7 +44,7 @@ gulp.task(TASK_COPY_CONFIG, cb => {
     return gulp
         .src(configFilePath)
         .pipe(rename('config.json'))
-        .pipe(gulp.dest(BUILD_CONFIG_DIR));
+        .pipe(gulp.dest(`./${BUILD_CONFIG_DIR}`));
 });
 /*/********************************************************************///
 /*///*/
