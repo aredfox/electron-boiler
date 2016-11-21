@@ -26,9 +26,19 @@ const packagejson = require('./package.json');
 
 /* ******************************************************************** */
 /* DEBUG TASKS */
-const TASK_DEBUG = 'debug';
+const TASK_DEBUG = '::debug';
 gulp.task(TASK_DEBUG, cb => {
     log(`Running GULP for project '${getProjectName()}' in '${getEnvironmentName()}'-environment.`);
+    cb();
+});
+const TASK_DEBUG_START = '::debug:seq:start';
+gulp.task(TASK_DEBUG_START, cb => {
+    logInfo(`Signal 'START' running GULP for project '${getProjectName()}' in '${getEnvironmentName()}'-environment.`);
+    cb();
+});
+const TASK_DEBUG_DONE = '::debug:seq:done';
+gulp.task(TASK_DEBUG_DONE, cb => {
+    logInfo(`Signal 'DONE' running GULP for project '${getProjectName()}' in '${getEnvironmentName()}'-environment.`);
     cb();
 });
 /*/********************************************************************///
@@ -38,9 +48,10 @@ gulp.task(TASK_DEBUG, cb => {
 /* CLEAN TASKS */
 const TASK_CLEAN = 'clean';
 gulp.task(TASK_CLEAN, cb => {
-    runSequence(
-        TASK_DEBUG,
+    runSequence(        
+        TASK_DEBUG_START,
         TASK_CLEAN_BUILD_DIR,
+        TASK_DEBUG_DONE,        
         cb
     );    
 });
@@ -92,7 +103,7 @@ const LOG_WARNING = 'wng';
 const LOG_ERROR = 'err';
 colors.setTheme({
     thdbg: ['bgBlack', 'grey'],
-    thinf: ['bgWhite', 'blue'],
+    thinf: ['bgBlue', 'white'],
     thwng: ['bgYellow', 'black'],
     therr: ['bgRed', 'white']
 });
