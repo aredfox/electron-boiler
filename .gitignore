@@ -30,6 +30,7 @@ coverage
 build/
 dist/
 build/Release
+/app
 app/
 
 # Dependency directories
