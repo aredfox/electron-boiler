@@ -13,6 +13,8 @@ const runSequence = require('run-sequence');
 const sourcemaps = require('gulp-sourcemaps');
 const less = require('gulp-less');
 const cssmin = require('gulp-cssmin');
+const postcss = require('gulp-postcss');
+const autoprefixer = require('autoprefixer');
 const argv = require('yargs').argv;
 const colors = require('colors/safe');
 /* ******************************************************************** */
@@ -75,11 +77,16 @@ gulp.task(TASK_COMPILE_LESS, cb => {
         .src(`${SOURCE_STYLES_DIR}/**/*.less`)
         .pipe(sourcemaps.init())
         .pipe(less())
+        .pipe(postcss([
+            autoprefixer({
+                browsers: ['last 2 Chrome versions'] // https://github.com/ai/browserslist#queries
+            })
+        ]))
         .pipe(cssmin())
         .pipe(rename({
             suffix: '.min'
         }))
-        .pipe(sourcemaps.write('.'))
+        .pipe(sourcemaps.write('.'))        
         .pipe(gulp.dest(`${BUILD_STYLES_DIR}`));       
 });
 /*/********************************************************************///
