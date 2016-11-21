@@ -98,7 +98,8 @@ colors.setTheme({
 });
 function log(message, type) {    
     type = type || LOG_DEBUG;
-    console.log(colors['th'+type](` > ${[type.toUpperCase()]} [${getFormattedTime()}] ${message}`));
+    const theme = colors['th'+type]; 
+    console.log(theme(` > ${[type.toUpperCase()]} [${getFormattedTime()}] ${message}`));
 }
 function logInfo(message) { log(message, LOG_INFO); }
 function logWarning(message) { log(message, LOG_WARNING); }
