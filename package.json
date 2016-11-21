@@ -1,15 +1,25 @@
 {
-    "name": "electron-boiler",
-    "description": "Opinionated electron.atom.io boilerplate / template",
-    "version": "0.0.1",
-    "author": {
-        "name": "Yves Schelpe",
-        "email": "ys@delegate-it.be",
-        "url": "http://www.delegate-it.be"
-    },
-    "license": "MIT",
-    "repository": {
-        "type": "git",
-        "url": ""
-    }
+  "name": "electron-boiler",
+  "description": "Opinionated electron.atom.io boilerplate / template",
+  "version": "0.0.1",
+  "author": {
+    "name": "Yves Schelpe",
+    "email": "ys@delegate-it.be",
+    "url": "http://www.delegate-it.be"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aredfox/electron-boiler"
+  },
+  "main": "boot.js",
+  "scripts": {
+    "start": "electron ./app/main"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "electron": "^1.4.7",
+    "gulp": "^3.9.1",
+    "moment": "^2.16.0"
+  }
 }
