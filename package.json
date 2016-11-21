@@ -23,6 +23,7 @@
     "electron": "^1.4.7",
     "gulp": "^3.9.1",
     "gulp-ignore": "^2.0.2",
+    "gulp-rename": "^1.2.2",
     "moment": "^2.16.0",
     "run-sequence": "^1.2.2",
     "yargs": "^6.4.0"

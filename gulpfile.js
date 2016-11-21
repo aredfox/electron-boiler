@@ -5,6 +5,7 @@ const path = require('path');
 const moment = require('moment');
 const del = require('del');
 const ignore = require('gulp-ignore');
+const rename = require('gulp-rename');
 const runSequence = require('run-sequence');
 const argv = require('yargs').argv;
 const colors = require('colors/safe');
@@ -18,9 +19,33 @@ const SOURCE_VIEWS_DIR = path.resolve('./src/views');
 const SOURCE_LIB_DIR = path.resolve('./src/lib');
 const SOURCE_STYLES_DIR = path.resolve('./src/styles');
 const BUILD_DIR = path.resolve('./app');
+const BUILD_DATA_DIR = path.resolve('./app/data');
+const BUILD_CONFIG_DIR = path.resolve('/app/data/config');
 /* ******************************************************************** */
 /* FILE IMPORTS */
 const packagejson = require('./package.json');
+/*/********************************************************************///
+/*///*/
+
+/* ******************************************************************** */
+/* COPY TASKS */
+const TASK_COPY = 'copy';
+gulp.task(TASK_COPY, cb => {
+    runSequence(
+        TASK_COPY_CONFIG,     
+        cb
+    );    
+});
+const TASK_COPY_CONFIG = `${TASK_COPY}:config`;
+gulp.task(TASK_COPY_CONFIG, cb => {
+    const configFileName = `config.${getEnvironmentName().toLowerCase()}.json`;
+    const configFilePath = path.resolve(`${SOURCE_CONFIG_DIR}/${configFileName}`);
+    logInfo(`Will grab config file '${configFileName}' as source and output as config.json in '${BUILD_CONFIG_DIR}'.`);
+    return gulp
+        .src(configFilePath)
+        .pipe(rename('config.json'))
+        .pipe(gulp.dest(BUILD_CONFIG_DIR));
+});
 /*/********************************************************************///
 /*///*/
 
