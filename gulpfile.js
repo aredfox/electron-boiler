@@ -25,26 +25,6 @@ const packagejson = require('./package.json');
 /*///*/
 
 /* ******************************************************************** */
-/* DEBUG TASKS */
-const TASK_DEBUG = '::debug';
-gulp.task(TASK_DEBUG, cb => {
-    log(`Running GULP for project '${getProjectName()}' in '${getEnvironmentName()}'-environment.`);
-    cb();
-});
-const TASK_DEBUG_START = '::debug:seq:start';
-gulp.task(TASK_DEBUG_START, cb => {
-    logInfo(`Signal 'START' running GULP for project '${getProjectName()}' in '${getEnvironmentName()}'-environment.`);
-    cb();
-});
-const TASK_DEBUG_DONE = '::debug:seq:done';
-gulp.task(TASK_DEBUG_DONE, cb => {
-    logInfo(`Signal 'DONE' running GULP for project '${getProjectName()}' in '${getEnvironmentName()}'-environment.`);
-    cb();
-});
-/*/********************************************************************///
-/*///*/
-
-/* ******************************************************************** */
 /* CLEAN TASKS */
 const TASK_CLEAN = 'clean';
 gulp.task(TASK_CLEAN, cb => {
@@ -118,5 +98,25 @@ function logError(message) { log(message, LOG_ERROR); }
 function getFormattedTime() {
     return moment().format('HH:mm:ss');
 }
+/*/********************************************************************///
+/*///*/
+
+/* ******************************************************************** */
+/* DEBUG TASKS */
+const TASK_DEBUG = '::debug';
+gulp.task(TASK_DEBUG, cb => {
+    log(`Running GULP for project '${getProjectName()}' in '${getEnvironmentName()}'-environment.`);
+    cb();
+});
+const TASK_DEBUG_START = '::debug:seq:start';
+gulp.task(TASK_DEBUG_START, cb => {
+    logInfo(`Signal 'START' running GULP for project '${getProjectName()}' in '${getEnvironmentName()}'-environment.`);
+    cb();
+});
+const TASK_DEBUG_DONE = '::debug:seq:done';
+gulp.task(TASK_DEBUG_DONE, cb => {
+    logInfo(`Signal 'DONE' running GULP for project '${getProjectName()}' in '${getEnvironmentName()}'-environment.`);
+    cb();
+});
 /*/********************************************************************///
 /*///*/
