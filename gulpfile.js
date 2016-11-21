@@ -10,6 +10,9 @@ const ignore = require('gulp-ignore');
 const rename = require('gulp-rename');
 const json = require('gulp-json-editor');
 const runSequence = require('run-sequence');
+const sourcemaps = require('gulp-sourcemaps');
+const less = require('gulp-less');
+const cssmin = require('gulp-cssmin');
 const argv = require('yargs').argv;
 const colors = require('colors/safe');
 /* ******************************************************************** */
@@ -24,9 +27,61 @@ const SOURCE_STYLES_DIR = path.resolve('./src/styles');
 const BUILD_DIR = path.resolve('./app');
 const BUILD_DATA_DIR = path.resolve('./app/data');
 const BUILD_CONFIG_DIR = path.resolve('./app/data/config');
+const BUILD_STYLES_DIR = path.resolve('./app/styles');
 /* ******************************************************************** */
 /* FILE IMPORTS */
 const packagejson = require('./package.json');
+/*/********************************************************************///
+/*///*/
+
+/* ******************************************************************** */
+/* BUILD TASKS */
+const TASK_BUILD = 'build';
+gulp.task(TASK_BUILD, cb => {
+    logInfo(`Perform BUILD.`);
+    runSequence(
+        TASK_BUILD_COMPILE,     
+        cb
+    );    
+});
+const TASK_BUILD_COMPILE = `${TASK_BUILD}:compile`;
+gulp.task(TASK_BUILD_COMPILE, cb => {
+    logInfo(`Perform BUILD:COMPILE.`);
+    runSequence(
+        TASK_DEBUG_START,
+        TASK_CLEAN,
+        TASK_COMPILE,
+        TASK_COPY,
+        TASK_DEBUG_DONE,
+        cb
+    );
+});
+/*/********************************************************************///
+/*///*/
+
+/* ******************************************************************** */
+/* COMPILE TASKS */
+const TASK_COMPILE = 'compile';
+gulp.task(TASK_COMPILE, cb => {
+    runSequence(
+        TASK_COMPILE_LESS,     
+        cb
+    );    
+});
+const TASK_COMPILE_LESS = `${TASK_COMPILE}:less`;
+gulp.task(TASK_COMPILE_LESS, cb => {
+    logInfo(`Will grab less files that match '${SOURCE_STYLES_DIR}/**/*.less' and compile to styles.min.css'.`);
+    return gulp
+        .src(`${SOURCE_STYLES_DIR}/**/*.less`)
+        .pipe(sourcemaps.init())
+        .pipe(less())
+        .pipe(cssmin())
+        .pipe(rename({
+            suffix: '.min'
+        }))
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest(`${BUILD_STYLES_DIR}`));       
+});
 /*/********************************************************************///
 /*///*/
 
@@ -71,10 +126,8 @@ gulp.task(TASK_COPY_CONFIG, cb => {
 /* CLEAN TASKS */
 const TASK_CLEAN = 'clean';
 gulp.task(TASK_CLEAN, cb => {
-    runSequence(        
-        TASK_DEBUG_START,
-        TASK_CLEAN_BUILD_DIR,
-        TASK_DEBUG_DONE,        
+    runSequence(                
+        TASK_CLEAN_BUILD_DIR,                
         cb
     );    
 });
