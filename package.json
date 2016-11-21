@@ -1,0 +1,15 @@
+{
+    "name": "electron-boiler",
+    "description": "Opinionated electron.atom.io boilerplate / template",
+    "version": "0.0.1",
+    "author": {
+        "name": "Yves Schelpe",
+        "email": "ys@delegate-it.be",
+        "url": "http://www.delegate-it.be"
+    },
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": ""
+    }
+}
