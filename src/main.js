@@ -1,15 +1,22 @@
 /* ******************************************************************** */
 /* MODULE IMPORTS */
-import electron, { app } from 'electron';
+import electron, { app, BrowserWindow } from 'electron';
 /* FILE IMPORTS */
 import packagejson from './package.json';
 /*/********************************************************************///
 
 /* ******************************************************************** */
 /* ELECTRON APP EVENTS */
+let mainWindow;
 app.on('ready', () => {
-    console.log('Electron {app} loaded.');
-    quit();
+    mainWindow = new BrowserWindow({
+        width: 500, height: 450
+    });
+
+    mainWindow.loadURL(`file://${__dirname}/views/app.html`);    
+});
+app.on('window-all-closed', () => {  
+    app.quit();
 });
 /*/********************************************************************///
 
