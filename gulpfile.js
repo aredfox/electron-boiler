@@ -34,6 +34,7 @@ const BUILD_DIR = path.resolve('./app');
 const BUILD_DATA_DIR = path.resolve('./app/data');
 const BUILD_CONFIG_DIR = path.resolve('./app/data/config');
 const BUILD_VIEWS_DIR = path.resolve('./app/views');
+const BUILD_LIB_DIR = path.resolve('./app/lib');
 const BUILD_STYLES_DIR = path.resolve('./app/styles');
 const BUILD_ARTIFACTS = './_buildartifacts';
 const BUILD_SOURCEMAPS_JS_DIR = './_buildartifacts/maps/js';
@@ -75,7 +76,8 @@ const TASK_COMPILE = 'compile';
 gulp.task(TASK_COMPILE, cb => {
     runSequence(
         TASK_COMPILE_LESS, 
-        TASK_COMPILE_JS, 
+        TASK_COMPILE_JS_VIEWS, 
+        TASK_COMPILE_JS_LIB,
         TASK_COMPILE_JS_MAIN,   
         cb
     );    
@@ -100,13 +102,13 @@ gulp.task(TASK_COMPILE_LESS, cb => {
         .pipe(sourcemaps.write(BUILD_SOURCEMAPS_STYLES_DIR))        
         .pipe(gulp.dest(`${BUILD_STYLES_DIR}`));       
 });
-const TASK_COMPILE_JS = `${TASK_COMPILE}:js`;
-gulp.task(TASK_COMPILE_JS, cb => {
+const TASK_COMPILE_JS_VIEWS = `${TASK_COMPILE}:js:views`;
+gulp.task(TASK_COMPILE_JS_VIEWS, cb => {
     const glob = [
-        `${SOURCE_DIR}/**/*.{js,jsx}`
+        `${SOURCE_DIR}/views/**/*.{js,jsx}`
         ,`!${SOURCE_DIR}/main.js` // mains.js ignored as it needs it's own file
     ];
-    logInfo(` |JS/JSX| Will grab all files matching the pattern '${glob}' and copy them to '${BUILD_VIEWS_DIR} as 'app.js'.`);
+    logInfo(` |JSVIEWS-JS/JSX| Will grab all files matching the pattern '${glob}' and copy them to '${BUILD_VIEWS_DIR} as 'app.js'.`);
     return gulp
         .src(glob)
         .pipe(sourcemaps.init())
@@ -117,12 +119,27 @@ gulp.task(TASK_COMPILE_JS, cb => {
         .pipe(sourcemaps.write(BUILD_SOURCEMAPS_JS_DIR))
         .pipe(gulp.dest(`${BUILD_VIEWS_DIR}`));        
 });
+const TASK_COMPILE_JS_LIB = `${TASK_COMPILE}:js:lib`;
+gulp.task(TASK_COMPILE_JS_LIB, cb => {
+    const glob = [
+        `${SOURCE_DIR}/lib/**/*.js`        
+    ];
+    logInfo(` |JSLIB-JS| Will grab all files matching the pattern '${glob}' and copy them to '${BUILD_LIB_DIR}.`);
+    return gulp
+        .src(glob)
+        .pipe(sourcemaps.init())
+        .pipe(babel()) // configured in .babelrc        
+        .pipe(uglify())
+        .pipe(relativeSourcemapsSource({dest: BUILD_LIB_DIR}))
+        .pipe(sourcemaps.write(BUILD_SOURCEMAPS_JS_DIR))
+        .pipe(gulp.dest(`${BUILD_LIB_DIR}`));        
+});
 const TASK_COMPILE_JS_MAIN = `${TASK_COMPILE}:js:main`;
 gulp.task(TASK_COMPILE_JS_MAIN, cb => {
     const glob = [        
         ,`${SOURCE_DIR}/main.js` // mains.js needs it's own file
     ];
-    logInfo(` |main.js| Will grab all files matching the pattern '${glob}' and copy them to '${BUILD_DIR} as 'app.js'.`);
+    logInfo(` |JSMAIN-main.js| Will grab all files matching the pattern '${glob}' and copy them to '${BUILD_DIR} as 'app.js'.`);
     return gulp
         .src(glob)
         .pipe(sourcemaps.init())
