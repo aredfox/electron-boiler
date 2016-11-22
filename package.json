@@ -14,22 +14,32 @@
   },
   "main": "boot.js",
   "scripts": {
+    "prestart": "gulp build",
     "start": "electron ./app/main"
   },
-  "dependencies": {},
+  "dependencies": {
+    "moment": "^2.16.0",
+    "react": "^15.4.0",
+    "react-dom": "^15.4.0"
+  },
   "devDependencies": {
     "autoprefixer": "^6.5.3",
+    "babel": "^6.5.2",
     "colors": "^1.1.2",
     "del": "^2.2.2",
     "electron": "^1.4.7",
     "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-concat": "^2.6.1",
     "gulp-cssmin": "^0.1.7",
     "gulp-ignore": "^2.0.2",
     "gulp-json-editor": "^2.2.1",
     "gulp-less": "^3.3.0",
     "gulp-postcss": "^6.2.0",
+    "gulp-relative-sourcemaps-source": "^0.1.4",
     "gulp-rename": "^1.2.2",
     "gulp-sourcemaps": "^1.9.1",
+    "gulp-uglify": "^2.0.0",
     "md5": "^2.2.1",
     "moment": "^2.16.0",
     "run-sequence": "^1.2.2",

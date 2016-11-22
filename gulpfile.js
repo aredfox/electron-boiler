@@ -11,6 +11,10 @@ const rename = require('gulp-rename');
 const json = require('gulp-json-editor');
 const runSequence = require('run-sequence');
 const sourcemaps = require('gulp-sourcemaps');
+const relativeSourcemapsSource = require('gulp-relative-sourcemaps-source');
+const babel = require('gulp-babel');
+const concat = require('gulp-concat');
+const uglify = require('gulp-uglify');
 const less = require('gulp-less');
 const cssmin = require('gulp-cssmin');
 const postcss = require('gulp-postcss');
@@ -31,6 +35,9 @@ const BUILD_DATA_DIR = path.resolve('./app/data');
 const BUILD_CONFIG_DIR = path.resolve('./app/data/config');
 const BUILD_VIEWS_DIR = path.resolve('./app/views');
 const BUILD_STYLES_DIR = path.resolve('./app/styles');
+const BUILD_ARTIFACTS = './_buildartifacts';
+const BUILD_SOURCEMAPS_JS_DIR = './_buildartifacts/maps/js';
+const BUILD_SOURCEMAPS_STYLES_DIR = './_buildartifacts/maps/js';
 /* ******************************************************************** */
 /* FILE IMPORTS */
 const packagejson = require('./package.json');
@@ -67,13 +74,15 @@ gulp.task(TASK_BUILD_COMPILE, cb => {
 const TASK_COMPILE = 'compile';
 gulp.task(TASK_COMPILE, cb => {
     runSequence(
-        TASK_COMPILE_LESS,     
+        TASK_COMPILE_LESS, 
+        TASK_COMPILE_JS, 
+        TASK_COMPILE_JS_MAIN,   
         cb
     );    
 });
 const TASK_COMPILE_LESS = `${TASK_COMPILE}:less`;
 gulp.task(TASK_COMPILE_LESS, cb => {
-    logInfo(`Will grab less files that match '${SOURCE_STYLES_DIR}/**/*.less' and compile to styles.min.css'.`);
+    logInfo(` |LESS| Will grab less files that match '${SOURCE_STYLES_DIR}/**/*.less' and compile to styles.min.css'.`);
     return gulp
         .src(`${SOURCE_STYLES_DIR}/**/*.less`)
         .pipe(sourcemaps.init())
@@ -87,8 +96,41 @@ gulp.task(TASK_COMPILE_LESS, cb => {
         .pipe(rename({
             suffix: '.min'
         }))
-        .pipe(sourcemaps.write('.'))        
+        .pipe(relativeSourcemapsSource({dest: BUILD_STYLES_DIR}))
+        .pipe(sourcemaps.write(BUILD_SOURCEMAPS_STYLES_DIR))        
         .pipe(gulp.dest(`${BUILD_STYLES_DIR}`));       
+});
+const TASK_COMPILE_JS = `${TASK_COMPILE}:js`;
+gulp.task(TASK_COMPILE_JS, cb => {
+    const glob = [
+        `${SOURCE_DIR}/**/*.{js,jsx}`
+        ,`!${SOURCE_DIR}/main.js` // mains.js ignored as it needs it's own file
+    ];
+    logInfo(` |JS/JSX| Will grab all files matching the pattern '${glob}' and copy them to '${BUILD_VIEWS_DIR} as 'app.js'.`);
+    return gulp
+        .src(glob)
+        .pipe(sourcemaps.init())
+        .pipe(babel()) // configured in .babelrc
+        .pipe(concat('app.js'))
+        .pipe(uglify())
+        .pipe(relativeSourcemapsSource({dest: BUILD_VIEWS_DIR}))
+        .pipe(sourcemaps.write(BUILD_SOURCEMAPS_JS_DIR))
+        .pipe(gulp.dest(`${BUILD_VIEWS_DIR}`));        
+});
+const TASK_COMPILE_JS_MAIN = `${TASK_COMPILE}:js:main`;
+gulp.task(TASK_COMPILE_JS_MAIN, cb => {
+    const glob = [        
+        ,`${SOURCE_DIR}/main.js` // mains.js needs it's own file
+    ];
+    logInfo(` |main.js| Will grab all files matching the pattern '${glob}' and copy them to '${BUILD_DIR} as 'app.js'.`);
+    return gulp
+        .src(glob)
+        .pipe(sourcemaps.init())
+        .pipe(babel()) // configured in .babelrc        
+        .pipe(uglify())
+        .pipe(relativeSourcemapsSource({dest: BUILD_DIR}))
+        .pipe(sourcemaps.write(BUILD_SOURCEMAPS_JS_DIR))
+        .pipe(gulp.dest(`${BUILD_DIR}`));        
 });
 /*/********************************************************************///
 /*///*/
@@ -98,6 +140,7 @@ gulp.task(TASK_COMPILE_LESS, cb => {
 const TASK_COPY = 'copy';
 gulp.task(TASK_COPY, cb => {
     runSequence(
+        TASK_COPY_PACKAGEJSON,
         TASK_COPY_CONFIG,
         TASK_COPY_VIEWS_HTML,
         cb
@@ -110,8 +153,8 @@ gulp.task(TASK_COPY_CONFIG, cb => {
     const buildTimestamp = moment();    
     const buildNumber = buildTimestamp.format('YYYYMMDDHHmmss');  
     const machine = `${os.platform()}:${os.type()}:${os.hostname()}`;  
-    logInfo(`Will grab config file '${configFileName}' and inject build parameters: buildNumber '${buildNumber}' / buildTimestamp '${buildTimestamp.format()}' / machine '${machine}'.`);    
-    logInfo(`Will grab config file '${configFileName}' as source and output as config.json in '${BUILD_CONFIG_DIR}'.`);
+    logInfo(` |CONFIG.JSON| Will grab config file '${configFileName}' and inject build parameters: buildNumber '${buildNumber}' / buildTimestamp '${buildTimestamp.format()}' / machine '${machine}'.`);    
+    logInfo(` |CONFIG.JSON| Will grab config file '${configFileName}' as source and output as config.json in '${BUILD_CONFIG_DIR}'.`);
     return gulp
         .src(configFilePath)
         .pipe(rename('config.json'))
@@ -128,10 +171,27 @@ gulp.task(TASK_COPY_CONFIG, cb => {
         }))
         .pipe(gulp.dest(`${BUILD_CONFIG_DIR}`));        
 });
+const TASK_COPY_PACKAGEJSON = `${TASK_COPY}:packagejson`;
+gulp.task(TASK_COPY_PACKAGEJSON, cb => {      
+    logInfo(` |PACKAGE.JSON| Will grab package.json and clean it out.`);        
+    return gulp
+        .src('./package.json')        
+        .pipe(json(json => {
+            delete json.repository;
+            delete json.main;
+            delete json.scripts;
+            delete json.devDependencies;            
+            return json;
+        }, {
+            'indent_char': '\t',
+            'indent_size': 1
+        }))
+        .pipe(gulp.dest(`${BUILD_DIR}`));        
+});
 const TASK_COPY_VIEWS_HTML = `${TASK_COPY}:views:html`;
 gulp.task(TASK_COPY_VIEWS_HTML, cb => {
     const glob = `${SOURCE_VIEWS_DIR}/**/*.{htm,html}`;            
-    logInfo(`Will grab all files matching the pattern '${glob}' and copyy them to '${BUILD_VIEWS_DIR}.`);
+    logInfo(` |HTM/HTML| Will grab all files matching the pattern '${glob}' and copy them to '${BUILD_VIEWS_DIR}.`);
     return gulp
         .src(glob)                
         .pipe(gulp.dest(`${BUILD_VIEWS_DIR}`));        
