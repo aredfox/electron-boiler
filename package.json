@@ -13,7 +13,7 @@
     "url": "https://github.com/aredfox/electron-boiler"
   },
   "main": "boot.js",
-  "scripts": {    
+  "scripts": {
     "start": "npm run build-dev && electron ./app/main",
     "prod": "npm run build-prod && electron ./app/main",
     "dev": "npm run build-dev && electron ./app/main",
@@ -34,6 +34,8 @@
   "devDependencies": {
     "autoprefixer": "^6.5.3",
     "babel": "^6.5.2",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-react": "^6.16.0",
     "colors": "^1.1.2",
     "del": "^2.2.2",
     "electron": "^1.4.7",
@@ -58,6 +60,6 @@
   },
   "build": {
     "appId": "electron-boiler",
-    "category": "desktop"    
+    "category": "desktop"
   }
 }
