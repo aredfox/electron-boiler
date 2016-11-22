@@ -40,11 +40,9 @@ app.on('window-all-closed', () => {
 function init() {
     initConfig();
 }
-function initConfig() {
-    console.log(path.resolve('./lib/config/config'));
+function initConfig() {    
     const config = new Config();
-    global.config = config;
-    console.log(global.config.environmentName);
+    global.config = config;    
 }
 /*/********************************************************************///
 
