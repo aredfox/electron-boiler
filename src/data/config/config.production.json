@@ -3,5 +3,11 @@
         "environment": {
             "name": "production"
         }
+    },
+    "config": {
+        "debug": {
+            "canShowDevTools": true,
+            "showDevToolsOnStartup": false
+        }
     }
 }

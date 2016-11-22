@@ -27,6 +27,7 @@
     "package-linux": "npm run prepackage && build -l --publish=\"never\" --dir"
   },
   "dependencies": {
+    "dot-object": "^1.5.4",
     "moment": "^2.16.0",
     "react": "^15.4.0",
     "react-dom": "^15.4.0"

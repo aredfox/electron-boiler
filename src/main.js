@@ -5,6 +5,9 @@ import url from 'url';
 import path from 'path';
 /* LIB IMPORTS */
 import Config from './lib/config/config';
+/* VARIABLES */
+let config;
+let mainWindow;
 /*/********************************************************************///
 
 /* ******************************************************************** */
@@ -14,7 +17,6 @@ init();
 
 /* ******************************************************************** */
 /* ELECTRON APP EVENTS */
-let mainWindow;
 app.on('ready', () => {
     mainWindow = new BrowserWindow({
         width: 500, height: 450
@@ -28,7 +30,9 @@ app.on('ready', () => {
         })
     );
 
-    mainWindow.openDevTools();        
+    if(config.get('debug.canShowDevTools') && config.get('debug.showDevToolsOnStartup')) {
+        mainWindow.openDevTools();        
+    }
 });
 app.on('window-all-closed', () => {  
     app.quit();
@@ -41,8 +45,8 @@ function init() {
     initConfig();
 }
 function initConfig() {    
-    const config = new Config();
-    global.config = config;    
+    config = new Config();
+    global.config = config;
 }
 /*/********************************************************************///
 
