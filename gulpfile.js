@@ -39,6 +39,7 @@ const BUILD_STYLES_DIR = path.resolve('./app/styles');
 const BUILD_ARTIFACTS = './_buildartifacts';
 const BUILD_SOURCEMAPS_JS_DIR = './_buildartifacts/maps/js';
 const BUILD_SOURCEMAPS_STYLES_DIR = './_buildartifacts/maps/js';
+const BUILD_VENDOR_DIR = './app/vendor/';
 /* ******************************************************************** */
 /* FILE IMPORTS */
 const packagejson = require('./package.json');
@@ -160,6 +161,7 @@ gulp.task(TASK_COPY, cb => {
         TASK_COPY_PACKAGEJSON,
         TASK_COPY_CONFIG,
         TASK_COPY_VIEWS_HTML,
+        TASK_COPY_VENDOR_FONTAWESOME,
         cb
     );    
 });
@@ -212,6 +214,14 @@ gulp.task(TASK_COPY_VIEWS_HTML, cb => {
     return gulp
         .src(glob)                
         .pipe(gulp.dest(`${BUILD_VIEWS_DIR}`));        
+});
+const TASK_COPY_VENDOR_FONTAWESOME = `${TASK_COPY}:vendor:font-awesome`;
+gulp.task(TASK_COPY_VENDOR_FONTAWESOME, cb => {
+    const glob = `./node_modules/font-awesome/**/*.{min.css,otf,eot,svg,ttf,woff,woff2}`;            
+    logInfo(` |VENDOR/FONT-AWESOME| Will grab all files matching the pattern '${glob}' and copy them to '${BUILD_VENDOR_DIR}.`);
+    return gulp
+        .src(glob)                
+        .pipe(gulp.dest(`${BUILD_VENDOR_DIR}/font-awesome`));        
 });
 /*/********************************************************************///
 /*///*/
