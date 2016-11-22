@@ -13,9 +13,18 @@
     "url": "https://github.com/aredfox/electron-boiler"
   },
   "main": "boot.js",
-  "scripts": {
-    "prestart": "gulp build",
-    "start": "electron ./app/main"
+  "scripts": {    
+    "start": "npm run build-dev && electron ./app/main",
+    "prod": "npm run build-prod && npm start",
+    "dev": "npm run build-dev && npm start",
+    "build": "npm run build-dev",
+    "build-dev": "gulp build --dev",
+    "build-prod": "gulp build --prod",
+    "clean": "gulp clean",
+    "prepackage": "npm run build-prod",
+    "package-win": "npm run prepackage && build -w --publish=\"never\" --dir",
+    "package-mac": "npm run prepackage && build -m --publish=\"never\" --dir",
+    "package-linux": "npm run prepackage && build -l --publish=\"never\" --dir"
   },
   "dependencies": {
     "moment": "^2.16.0",
@@ -28,6 +37,7 @@
     "colors": "^1.1.2",
     "del": "^2.2.2",
     "electron": "^1.4.7",
+    "electron-builder": "^8.6.0",
     "font-awesome": "^4.7.0",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
@@ -45,5 +55,9 @@
     "moment": "^2.16.0",
     "run-sequence": "^1.2.2",
     "yargs": "^6.4.0"
+  },
+  "build": {
+    "appId": "electron-boiler",
+    "category": "desktop"    
   }
 }

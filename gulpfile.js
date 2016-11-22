@@ -197,9 +197,10 @@ gulp.task(TASK_COPY_PACKAGEJSON, cb => {
         .src('./package.json')        
         .pipe(json(json => {
             delete json.repository;
-            delete json.main;
+            json.main = "main.js";
             delete json.scripts;
-            delete json.devDependencies;            
+            delete json.devDependencies;     
+            delete json.build;       
             return json;
         }, {
             'indent_char': '\t',
