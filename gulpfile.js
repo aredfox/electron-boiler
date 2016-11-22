@@ -29,6 +29,7 @@ const SOURCE_STYLES_DIR = path.resolve('./src/styles');
 const BUILD_DIR = path.resolve('./app');
 const BUILD_DATA_DIR = path.resolve('./app/data');
 const BUILD_CONFIG_DIR = path.resolve('./app/data/config');
+const BUILD_VIEWS_DIR = path.resolve('./app/views');
 const BUILD_STYLES_DIR = path.resolve('./app/styles');
 /* ******************************************************************** */
 /* FILE IMPORTS */
@@ -97,7 +98,8 @@ gulp.task(TASK_COMPILE_LESS, cb => {
 const TASK_COPY = 'copy';
 gulp.task(TASK_COPY, cb => {
     runSequence(
-        TASK_COPY_CONFIG,     
+        TASK_COPY_CONFIG,
+        TASK_COPY_VIEWS_HTML,
         cb
     );    
 });
@@ -125,6 +127,14 @@ gulp.task(TASK_COPY_CONFIG, cb => {
             'indent_size': 1
         }))
         .pipe(gulp.dest(`${BUILD_CONFIG_DIR}`));        
+});
+const TASK_COPY_VIEWS_HTML = `${TASK_COPY}:views:html`;
+gulp.task(TASK_COPY_VIEWS_HTML, cb => {
+    const glob = `${SOURCE_VIEWS_DIR}/**/*.{htm,html}`;            
+    logInfo(`Will grab all files matching the pattern '${glob}' and copyy them to '${BUILD_VIEWS_DIR}.`);
+    return gulp
+        .src(glob)                
+        .pipe(gulp.dest(`${BUILD_VIEWS_DIR}`));        
 });
 /*/********************************************************************///
 /*///*/
