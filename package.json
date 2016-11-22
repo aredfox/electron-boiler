@@ -15,8 +15,8 @@
   "main": "boot.js",
   "scripts": {    
     "start": "npm run build-dev && electron ./app/main",
-    "prod": "npm run build-prod && npm start",
-    "dev": "npm run build-dev && npm start",
+    "prod": "npm run build-prod && electron ./app/main",
+    "dev": "npm run build-dev && electron ./app/main",
     "build": "npm run build-dev",
     "build-dev": "gulp build --dev",
     "build-prod": "gulp build --prod",
