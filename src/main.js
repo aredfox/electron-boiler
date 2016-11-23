@@ -30,6 +30,15 @@ app.on('ready', () => {
         })
     );
 
+    // Open a-links in new external (native) browser window.
+    mainWindow.webContents.on('will-navigate', (e, url) => {
+        if(url !== mainWindow.webContents.getURL()) { 
+            // if the url isn't the page we are on, we'll open it in the native browser
+            e.preventDefault();
+            electron.shell.openExternal(url);
+        }
+    });
+
     if(config.get('debug.canShowDevTools') && config.get('debug.showDevToolsOnStartup')) {
         mainWindow.openDevTools();        
     }
@@ -41,7 +50,7 @@ app.on('window-all-closed', () => {
 
 /* ******************************************************************** */
 /* INIT METHODS */
-function init() {
+function init() {    
     initConfig();
 }
 function initConfig() {    
