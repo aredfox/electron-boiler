@@ -1,10 +1,12 @@
 # Electron Boiler (electron-boiler)
  
-<img src="https://raw.githubusercontent.com/aredfox/electron-boiler/master/src/data/resources/build/icon.png" width="80" height="80" style="float: left; margin-right: 16px"> Opinionated electron.atom.io boilerplate / template that incorporates _less_, _react_ (w/ es2015/react plugins of _babel_). Using _gulp_ as the main task runner. 
-
-<br style="clear: both"/>
+<img align="left" src="https://raw.githubusercontent.com/aredfox/electron-boiler/master/src/data/resources/build/icon.png" width="80" height="80" style="margin-right: 16px"> Opinionated electron.atom.io boilerplate / template that incorporates _less_, _react_ (w/ es2015/react plugins of _babel_). Using _gulp_ as the main task runner.
+<p style="clear: both">
+<br/>
 
 ---
+
+<br/>
 
 ## Get started
 
@@ -46,3 +48,4 @@ Packaging is done via the [**electron-builder**](https://github.com/electron-use
 * `npm package-win`
 * `npm package-linux`
 * `npm package-mac`
+</p>
