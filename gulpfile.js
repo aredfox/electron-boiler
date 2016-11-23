@@ -1,5 +1,6 @@
 /* ******************************************************************** */
 /* MODULE IMPORTS */
+const childProcess = require('child_process');
 const gulp = require('gulp');
 const os = require('os');
 const md5 = require('md5');
@@ -172,7 +173,7 @@ gulp.task(TASK_COPY_CONFIG, cb => {
     const buildTimestamp = moment();    
     const buildNumber = buildTimestamp.format('YYYYMMDDHHmmss');  
     const machine = `${os.platform()}:${os.type()}:${os.hostname()}`;  
-    logInfo(` |CONFIG.JSON| Will grab config file '${configFileName}' and inject build parameters: buildNumber '${buildNumber}' / buildTimestamp '${buildTimestamp.format()}' / machine '${machine}'.`);    
+    logInfo(` |CONFIG.JSON| Will grab config file '${configFileName}' and inject build parameters: commit '${getCommitHash()}' / buildNumber '${buildNumber}' / buildTimestamp '${buildTimestamp.format()}' / machine '${machine}'.`);    
     logInfo(` |CONFIG.JSON| Will grab config file '${configFileName}' as source and output as config.json in '${BUILD_CONFIG_DIR}'.`);
     return gulp
         .src(configFilePath)
@@ -180,9 +181,10 @@ gulp.task(TASK_COPY_CONFIG, cb => {
         .pipe(json(json => {
             json.build.number = buildNumber;
             json.build.timestamp = buildTimestamp.format();
+            json.build.commit = getCommitHash();
             json.build.environment.machine = {};
             json.build.environment.machine.id = machine;
-            json.build.environment.machine.number = md5(machine);
+            json.build.environment.machine.number = md5(machine);            
             return json;
         }, {
             'indent_char': '\t',
@@ -262,6 +264,14 @@ function isDev() {
 }
 function isProd() {
     return argv.prod;
+}
+function getCommitHash() {
+    try {
+        return childProcess.execSync('git rev-parse HEAD').toString().trim();
+    } catch(err) {
+        logError(`Not able to fetch latest commit hash: "${err}". Returning "-1".`);
+        return -1;        
+    }
 }
 /* ******************************************************************** */
 /* HELPER PACKAGE JSON METHODS */
