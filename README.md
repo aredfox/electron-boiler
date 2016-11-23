@@ -32,7 +32,7 @@ Make sure you have [**node and npm**](https://nodejs.org/en/download/) installed
 
 ## Development
 
-**todo**
+Open your favourite code editor and run `npm run dev` to edit & view live changes in your application.
 
 ## Packaging/Deployment
 
