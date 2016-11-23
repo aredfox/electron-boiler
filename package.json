@@ -73,7 +73,14 @@
       "category": "public.app-category.education",
       "icon": "src/data/resources/build/icon.icns"
     },
-    "win": {},
-    "linux": {}
-  }
+    "win": {
+      "icon": "src/data/resources/build/icon.ico"
+    },
+    "linux": {}    
+  },
+  "directories": {
+      "output": "dist",
+      "buildResources": "src/data/resources",
+      "app": "app"
+    }
 }
