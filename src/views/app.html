@@ -14,7 +14,10 @@
     and Electron <script>document.write(process.versions.electron)</script>.</p>
     <p><i class="fa fa-info-circle"></i> Running application "<script>document.write(require('electron').remote.getGlobal('config').applicationName)</script>"
     with version <script>document.write(require('electron').remote.getGlobal('config').version)</script>
-    in "<script>document.write(require('electron').remote.getGlobal('config').environmentName)</script>" environment.</p>
+    in "<script>document.write(require('electron').remote.getGlobal('config').environmentName)</script>" environment. 
+    Built from commit #'<code><script>document.write(require('electron').remote.getGlobal('config').commithash)</script></code>'
+    located at <script>document.write('<a href=\"' + require('electron').remote.getGlobal('config').gitrepo + '">')</script>
+    <script>document.write(require('electron').remote.getGlobal('config').gitrepo)</script></a>.</p>
   </body>
   <script>
     // You can also require other files to run in this process

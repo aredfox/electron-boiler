@@ -198,7 +198,7 @@ gulp.task(TASK_COPY_PACKAGEJSON, cb => {
     return gulp
         .src('./package.json')        
         .pipe(json(json => {
-            delete json.repository;
+            // delete json.repository; // uncomment this when you don't want to share the repo
             json.main = "main.js";
             delete json.scripts;
             delete json.devDependencies;     

@@ -12,6 +12,9 @@ export default class Config {
     constructor() {
         this.environmentName = (configjson.build.environment.name || 'development').toLowerCase();
         this.version = `${packagejson.version}-${configjson.build.number}`;
+        this.commithash = `${configjson.build.commit}`;
+        this.gitrepo = `${packagejson.repository.url}`;
+        this.githubrepolink = `${packagejson.repository.url}/commit/${configjson.build.commit}`;
         this.applicationName = packagejson.displayName || packagejson.name || '(*undefined)';
         this.configObject = configjson.config || {};
     }
