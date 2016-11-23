@@ -41,6 +41,7 @@
     "del": "^2.2.2",
     "electron": "^1.4.7",
     "electron-builder": "^8.6.0",
+    "electron-reload": "^1.0.3",
     "font-awesome": "^4.7.0",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",

@@ -1,5 +1,6 @@
 /* ******************************************************************** */
 /* MODULE IMPORTS */
+const fs = require('fs');
 const childProcess = require('child_process');
 const gulp = require('gulp');
 const watch = require('gulp-watch');
@@ -89,26 +90,30 @@ gulp.task('watchers', () => {
     return watch('src/**/*', vinyl => {
         let handled = false;
         logChange(`${vinyl.event.toUpperCase()} @ '${vinyl.path}'.`);
-        if(vinyl.path.endsWith('.js') || vinyl.path.endsWith('.jsx')) {
-            handled = true;
-            logChange(`Detected js/jsx thus running full compile.`);
-            runSequence(TASK_COMPILE);            
-        }
-        if(vinyl.path.endsWith('.less') && !handled) {
-            handled = true;
-            logChange(`Detected less thus running css/style build.`);
-            runSequence(TASK_COMPILE_LESS);            
-        }
-        if(vinyl.path.indexOf('src/data/') !== -1 && !handled) {
-            handled = true;
-            logChange(`Detected data folder thus running copy.`);
-            runSequence(TASK_COPY);            
-        }
-        if(!handled) {
-            handled = true;
-            logChange(`Detected not handled thus running full build.`);
-            runSequence(TASK_BUILD);            
-        }
+
+        /*if(hasChanged(vinyl.path, vinyl.path.replace('src/', 'app/'))) {*/
+            if(vinyl.path.endsWith('.js') || vinyl.path.endsWith('.jsx')) {
+                handled = true;
+                logChange(`Detected js/jsx thus running full compile.`);
+                runSequence(TASK_COMPILE);            
+            }
+            if(vinyl.path.endsWith('.less') && !handled) {
+                handled = true;
+                logChange(`Detected less thus running css/style build.`);
+                runSequence(TASK_COMPILE_LESS);            
+            }
+            if(vinyl.path.indexOf('src/data/') !== -1 && !handled) {
+                handled = true;
+                logChange(`Detected data folder thus running copy.`);
+                runSequence(TASK_COPY);            
+            }
+            if(!handled) {
+                handled = true;
+                logChange(`Detected not handled thus running full build.`);
+                runSequence(TASK_BUILD);            
+            }
+        /*}*/
+
         logChange(`${vinyl.event.toUpperCase()} @ '${vinyl.path}'.`);        
     });
 });

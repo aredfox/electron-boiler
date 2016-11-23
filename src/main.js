@@ -52,6 +52,10 @@ app.on('window-all-closed', () => {
 /* INIT METHODS */
 function init() {    
     initConfig();
+    if(global.config.isDev()) {        
+        console.log(`~~ APP: Development mode, switching on electron-reload with dir '${__dirname}'.`);
+        require('electron-reload')(__dirname);
+    }
 }
 function initConfig() {    
     config = new Config();
@@ -63,7 +67,7 @@ function initConfig() {
 /* HELPER METHODS */
 function quit() {
     if(app && app !== undefined) {
-        console.log('Quitting...');
+        console.log('~~ APP: Quitting.');
         app.quit();
     }
 }
