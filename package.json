@@ -1,7 +1,9 @@
 {
   "name": "electron-boiler",
+  "productName": "Electron Boiler",
+  "homepage": "https://github.com/aredfox/electron-boiler",
   "description": "Opinionated electron.atom.io boilerplate / template",
-  "version": "0.0.1",
+  "version": "0.9.0",
   "author": {
     "name": "Yves Schelpe",
     "email": "ys@delegate-it.be",
@@ -64,6 +66,14 @@
   },
   "build": {
     "appId": "electron-boiler",
-    "category": "desktop"
+    "productName": "Electron Boiler",
+    "category": "public.app-category.education",
+    "copyright": "Copyright © 2016 Yves Schelpe <ys@delegate-it.be>",
+    "mac": {
+      "category": "public.app-category.education",
+      "icon": "src/data/resources/build/icon.icns"
+    },
+    "win": {},
+    "linux": {}
   }
 }
