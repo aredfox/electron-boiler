@@ -2,6 +2,7 @@
 /* MODULE IMPORTS */
 const childProcess = require('child_process');
 const gulp = require('gulp');
+const watch = require('gulp-watch');
 const os = require('os');
 const md5 = require('md5');
 const path = require('path');
@@ -44,6 +45,9 @@ const BUILD_VENDOR_DIR = './app/vendor/';
 /* ******************************************************************** */
 /* FILE IMPORTS */
 const packagejson = require('./package.json');
+/* ELECTRON */
+let electronStopping = false;
+let electronProcess = null;
 /*/********************************************************************///
 /*///*/
 
@@ -68,6 +72,45 @@ gulp.task(TASK_BUILD_COMPILE, cb => {
         TASK_DEBUG_DONE,
         cb
     );
+});
+/*/********************************************************************///
+/*///*/
+
+/* ******************************************************************** */
+/* WATCH TASKS */
+const TASK_WATCH = 'watch';
+gulp.task(TASK_WATCH, ['run', 'watchers']);
+gulp.task('run', () => {
+    logInfo('Starting electron...');
+    return runElectron();
+});
+gulp.task('watchers', () => {
+    logInfo('Starting watch for all changes...');
+    return watch('src/**/*', vinyl => {
+        let handled = false;
+        logChange(`${vinyl.event.toUpperCase()} @ '${vinyl.path}'.`);
+        if(vinyl.path.endsWith('.js') || vinyl.path.endsWith('.jsx')) {
+            handled = true;
+            logChange(`Detected js/jsx thus running full compile.`);
+            runSequence(TASK_COMPILE);            
+        }
+        if(vinyl.path.endsWith('.less') && !handled) {
+            handled = true;
+            logChange(`Detected less thus running css/style build.`);
+            runSequence(TASK_COMPILE_LESS);            
+        }
+        if(vinyl.path.indexOf('src/data/') !== -1 && !handled) {
+            handled = true;
+            logChange(`Detected data folder thus running copy.`);
+            runSequence(TASK_COPY);            
+        }
+        if(!handled) {
+            handled = true;
+            logChange(`Detected not handled thus running full build.`);
+            runSequence(TASK_BUILD);            
+        }
+        logChange(`${vinyl.event.toUpperCase()} @ '${vinyl.path}'.`);        
+    });
 });
 /*/********************************************************************///
 /*///*/
@@ -161,6 +204,7 @@ gulp.task(TASK_COPY, cb => {
     runSequence(
         TASK_COPY_PACKAGEJSON,
         TASK_COPY_CONFIG,
+        TASK_COPY_DATA,
         TASK_COPY_VIEWS_HTML,
         TASK_COPY_VENDOR_FONTAWESOME,
         cb
@@ -209,6 +253,14 @@ gulp.task(TASK_COPY_PACKAGEJSON, cb => {
             'indent_size': 1
         }))
         .pipe(gulp.dest(`${BUILD_DIR}`));        
+});
+const TASK_COPY_DATA = `${TASK_COPY}:resources`;
+gulp.task(TASK_COPY_DATA, cb => {
+    const glob = [`${SOURCE_DATA_DIR}/**/*`, `!${SOURCE_DATA_DIR}/config/**/*`];            
+    logInfo(` |DATA| Will grab all files matching the pattern '${glob}' and copy them to '${BUILD_DATA_DIR}.`);
+    return gulp
+        .src(glob)                
+        .pipe(gulp.dest(`${BUILD_DATA_DIR}`));        
 });
 const TASK_COPY_VIEWS_HTML = `${TASK_COPY}:views:html`;
 gulp.task(TASK_COPY_VIEWS_HTML, cb => {
@@ -273,6 +325,30 @@ function getCommitHash() {
         return -1;        
     }
 }
+function runElectron() {
+    electronStopping = false;
+    electronProcess = null;
+    let electronPath = "./node_modules/electron/dist/electron";
+    let electronParameters = ["app/main.js"];
+    if (process.platform === 'darwin') {
+        electronPath = `${electronPath}.app/Contents/MacOS/Electron`;
+    }
+
+    function startElectron() {
+        electronProcess = childProcess.spawn(electronPath, electronParameters);
+        electronProcess.stdout.pipe(process.stdout);
+        electronProcess.on('close', (code, signal) => {
+            electronStopping = true;
+            logInfo('Electron stopped...');
+            log(`  .....code: '${code}'`);
+            log(`  ...signal: '${signal}'`);
+            electronProcess.kill();
+            process.exit();
+        });
+    }
+
+    return startElectron();
+}
 /* ******************************************************************** */
 /* HELPER PACKAGE JSON METHODS */
 function getProjectName() {
@@ -292,11 +368,13 @@ const LOG_DEBUG = 'dbg';
 const LOG_INFO = 'inf';
 const LOG_WARNING = 'wng';
 const LOG_ERROR = 'err';
+const LOG_CHANGE = 'chg';
 colors.setTheme({
     thdbg: ['bgBlack', 'grey'],
     thinf: ['bgBlue', 'white'],
     thwng: ['bgYellow', 'black'],
-    therr: ['bgRed', 'white']
+    therr: ['bgRed', 'white'],
+    thchg: ['bgMagenta', 'white']
 });
 function log(message, type) {    
     type = type || LOG_DEBUG;
@@ -306,6 +384,7 @@ function log(message, type) {
 function logInfo(message) { log(message, LOG_INFO); }
 function logWarning(message) { log(message, LOG_WARNING); }
 function logError(message) { log(message, LOG_ERROR); }
+function logChange(message) { log(message, LOG_CHANGE); }
 function getFormattedTime() {
     return moment().format('HH:mm:ss');
 }
