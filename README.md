@@ -36,4 +36,8 @@ Make sure you have [**node and npm**](https://nodejs.org/en/download/) installed
 
 ## Packaging/Deployment
 
-**todo**
+Packaging is done via the [**electron-builder**](https://github.com/electron-userland/electron-builder#readme) project, and basic setup has been made via npm scripts that are configure in the _build_ and _directories_ sections in _package.json_. Run the scripts below to build for a given platform, and read through the [**electron-builder**](https://github.com/electron-userland/electron-builder#readme) documentation to tweak the building process (e.g.: include installers).
+
+* `npm package-win`
+* `npm package-linux`
+* `npm package-mac`
