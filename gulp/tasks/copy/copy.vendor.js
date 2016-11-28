@@ -12,7 +12,7 @@ module.exports = (gulp, plugins) => {
         for(let vendor of plugins.config.paths.src.vendors) {
             gulp.src(vendor.source)
                 .pipe(gulp.dest(`${plugins.config.paths.dest.vendor}/${vendor.name}`));
-        }; 
+        };         
     };
 };
 /*/********************************************************************///

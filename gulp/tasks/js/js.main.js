@@ -9,7 +9,7 @@
 /* TASK DEBUG */
 module.exports = (gulp, plugins) => {
     return () => {        
-        gulp.src(plugins.config.paths.src.main)
+        return gulp.src(plugins.config.paths.src.main)
             .pipe(plugins.sourcemaps.init())
             .pipe(plugins.babel())            
             .pipe(plugins.uglify())

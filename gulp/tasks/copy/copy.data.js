@@ -9,7 +9,7 @@
 /* TASK DEBUG */
 module.exports = (gulp, plugins) => {
     return () => {        
-        gulp.src([
+        return gulp.src([
                 `${plugins.config.paths.src.data}/**/*`,
                 `!${plugins.config.paths.src.data}/config/**`
             ])                

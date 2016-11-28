@@ -16,7 +16,7 @@ module.exports = (gulp, plugins) => {
     const machine = `${plugins.os.platform()}:${plugins.os.type()}:${plugins.os.hostname()}`;
 
     return () => {                                        
-        gulp.src(`${plugins.config.paths.src.config}/config.${plugins.config.env.name}.json`)
+        return gulp.src(`${plugins.config.paths.src.config}/config.${plugins.config.env.name}.json`)
             .pipe(plugins.rename('config.json'))
             .pipe(plugins.jsoneditor(json => {                    
                 json.app.name = _getProjectName();

@@ -9,7 +9,7 @@
 /* TASK DEBUG */
 module.exports = (gulp, plugins) => {
     return () => {        
-        gulp.src(plugins.config.paths.src.views.html)                
+        return gulp.src(plugins.config.paths.src.views.html)                
             .pipe(gulp.dest(plugins.config.paths.dest.views.html)); 
     };
 };

@@ -11,10 +11,10 @@ module.exports = (gulp, plugins) => {
     const dest = `${plugins.config.paths.dest.base}/**/*`;
     
     return () => {        
-        plugins.del([
+        return plugins.del([
             dest,
             `!${dest}/*.gitkeep`
-        ]);
+        ]);        
     };
 };
 /*/********************************************************************///

@@ -9,7 +9,7 @@
 /* TASK DEBUG */
 module.exports = (gulp, plugins) => {
     return () => {        
-        gulp.src(plugins.config.paths.src.views.styles)
+        return gulp.src(plugins.config.paths.src.views.styles)
             .pipe(plugins.sourcemaps.init())
             .pipe(plugins.less())
             .pipe(plugins.autoprefixer({browsers: [ 'last 2 Chrome versions' ]})) // Using electron, we only need to autoprefix for chrome

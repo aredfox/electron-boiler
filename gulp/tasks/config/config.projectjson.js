@@ -12,7 +12,7 @@ const md5 = require('md5');
 /* TASK DEBUG */
 module.exports = (gulp, plugins) => {    
     return () => {                                        
-        gulp.src('./package.json')        
+        return gulp.src('./package.json')        
             .pipe(plugins.jsoneditor(json => {
             // delete json.repository; // uncomment this when you don't want to share the repo
             json.main = "main.js";

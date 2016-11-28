@@ -65,22 +65,13 @@ gulp.task('build', cb => {
     );        
 });
 // Watch
-gulp.task('watch', ['build'], () => {
+gulp.task('electronwatch', cb => {
     gulp.watch(plugins.config.paths.src.views.styles, ['styles:compile']);    
     gulp.watch(plugins.config.paths.src.views.html, ['copy:html']);
     gulp.watch(plugins.config.paths.src.views.react, ['views:jsx:compile']);    
     gulp.watch(`${plugins.config.paths.src.data}/**/*`, ['copy:data']);
     gulp.watch(`${plugins.config.paths.src.data}/config/**/*`, ['config:app']);
-});
-gulp.task('electronwatch', () => {
-    runSequence(
-        'watch',
-        'run:electron'
-    );
-});
-gulp.task('run:electron', cb => {
     runElectron();
-    cb();
 });
 // Helper method to run electron
 let electronProcess;
@@ -94,8 +85,7 @@ function runElectron() {
     function startElectron() {
         electronProcess = childProcess.spawn(electronPath, electronParameters);
         electronProcess.stdout.pipe(process.stdout);
-        electronProcess.on('close', (code, signal) => {
-            electronStopping = true;
+        electronProcess.on('close', (code, signal) => {            
             console.log('Electron stopped...');
             console.log(`  .....code: '${code}'`);
             console.log(`  ...signal: '${signal}'`);
