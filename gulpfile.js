@@ -3,6 +3,7 @@
 /* ******************************************************************** */
 /* MODULE IMPORTS */
 const gulp = require('gulp');
+const childProcess = require('child_process');
 const argv = require('yargs').argv;
 const runSequence = require('run-sequence');
 const config = require('./gulp/gulpfile.config');
@@ -65,11 +66,45 @@ gulp.task('build', cb => {
 });
 // Watch
 gulp.task('watch', ['build'], () => {
-    gulp.watch(config.paths.src.views.styles, ['styles:compile']);    
-    gulp.watch(config.paths.src.views.html, ['copy:html']);
-    gulp.watch(config.paths.src.views.react, ['views:jsx:compile']);    
-    gulp.watch(`${config.paths.src.data}/**/*`, ['copy:data']);
-    gulp.watch(`${config.paths.src.data}/config/**/*`, ['config:app']);
+    gulp.watch(plugins.config.paths.src.views.styles, ['styles:compile']);    
+    gulp.watch(plugins.config.paths.src.views.html, ['copy:html']);
+    gulp.watch(plugins.config.paths.src.views.react, ['views:jsx:compile']);    
+    gulp.watch(`${plugins.config.paths.src.data}/**/*`, ['copy:data']);
+    gulp.watch(`${plugins.config.paths.src.data}/config/**/*`, ['config:app']);
 });
+gulp.task('electronwatch', () => {
+    runSequence(
+        'watch',
+        'run:electron'
+    );
+});
+gulp.task('run:electron', cb => {
+    runElectron();
+    cb();
+});
+// Helper method to run electron
+let electronProcess;
+function runElectron() {    
+    let electronPath = "./node_modules/electron/dist/electron";
+    const electronParameters = ["app/main.js"];
+    if (process.platform === 'darwin') {
+        electronPath = `${electronPath}.app/Contents/MacOS/Electron`;
+    }
+
+    function startElectron() {
+        electronProcess = childProcess.spawn(electronPath, electronParameters);
+        electronProcess.stdout.pipe(process.stdout);
+        electronProcess.on('close', (code, signal) => {
+            electronStopping = true;
+            console.log('Electron stopped...');
+            console.log(`  .....code: '${code}'`);
+            console.log(`  ...signal: '${signal}'`);
+            electronProcess.kill();
+            process.exit();
+        });
+    }
+
+    return startElectron();
+}
 /*/********************************************************************///
 /*///*/

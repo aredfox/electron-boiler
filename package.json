@@ -18,7 +18,7 @@
   "scripts": {
     "start": "npm run build-dev && electron ./app/main",
     "prod": "npm run build-prod && electron ./app/main",
-    "dev": "npm run build-dev && gulp watch",
+    "dev": "npm run build-dev && gulp electronwatch",
     "build": "npm run build-dev",
     "build-dev": "gulp build --dev",
     "build-prod": "gulp build --prod",
