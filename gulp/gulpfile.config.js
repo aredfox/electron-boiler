@@ -19,6 +19,7 @@ module.exports = argv => {
             tasks: './gulp/tasks',
             src: {
                 base: './src',
+                main: './src/main.js',
                 config: './src/data/config',
                 data: './src/data',
                 views: {

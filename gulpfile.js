@@ -37,6 +37,7 @@ gulp.task('styles:compile', getTask('styles', 'compile'));
 // Views (JS/JSX Views/ Html)
 gulp.task('views:jsx:compile', getTask('js', 'jsx'));
 // Lib compile
+gulp.task('js:main:compile', getTask('js', 'main'));
 gulp.task('lib:compile', getTask('lib', 'compile'));
 // Copy
 gulp.task('copy', ['copy:data', 'copy:html', 'copy:vendor']);
@@ -56,6 +57,7 @@ gulp.task('build', cb => {
         'copy',
         'config',
         'lib:compile',
+        'js:main:compile',
         'styles:compile', 
         'views:jsx:compile',
         cb
