@@ -8,13 +8,9 @@
 /* ******************************************************************** */
 /* TASK DEBUG */
 module.exports = (gulp, plugins) => {
-    const dest = `${plugins.config.paths.dest.base}/**/*`;
-    
     return () => {        
-        plugins.del([
-            dest,
-            `!${dest}/*.gitkeep`
-        ]);
+        gulp.src(plugins.config.paths.src.views.html)                
+            .pipe(gulp.dest(plugins.config.paths.dest.views.html)); 
     };
 };
 /*/********************************************************************///

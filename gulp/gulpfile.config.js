@@ -20,6 +20,7 @@ module.exports = argv => {
             src: {
                 base: './src',
                 config: './src/data/config',
+                data: './src/data',
                 views: {
                     html: './src/views/*.html',
                     react: './src/views/*.{js,jsx}',
@@ -30,6 +31,7 @@ module.exports = argv => {
             dest: {
                 base: './app',
                 config: './app/data/config',
+                data: './app/data',
                 views: {
                     html: './app/views',
                     react: './app/views',

@@ -34,19 +34,26 @@ gulp.task('debug:config', getTask('debug', 'config'));
 gulp.task('debug:plugins', getTask('debug', 'plugins'));
 // Styles
 gulp.task('styles:compile', getTask('styles', 'compile'));
-// React (JS/JSX Views)
-gulp.task('js:jsx:compile', getTask('js', 'jsx'));
+// Views (JS/JSX Views/ Html)
+gulp.task('views:jsx:compile', getTask('js', 'jsx'));
+// Copy
+gulp.task('copy', ['copy:data', 'copy:html']);
+gulp.task('copy:html', getTask('copy', 'html'));
+gulp.task('copy:data', getTask('copy', 'data'));
 // Configuration
 gulp.task('config', ['config:app', 'config:projectjson']);
 gulp.task('config:app', getTask('config', 'app'));
 gulp.task('config:projectjson', getTask('config', 'projectjson'));
 // Build
+gulp.task('clean', getTask('build', 'clean'));
 gulp.task('build:clean', getTask('build', 'clean'));
-gulp.task('build', ['build:clean'], cb => {
+gulp.task('build', cb => {
     runSequence(
-        'config',
-        'styles:compile',
-        'js:jsx:compile',
+        'build:clean', 
+        'copy',
+        'config',      
+        'styles:compile', 
+        'views:jsx:compile',
         cb
     );        
 });
