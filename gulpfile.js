@@ -3,7 +3,7 @@
 /* ******************************************************************** */
 /* MODULE IMPORTS */
 const gulp = require('gulp');
-const del = require('del');
+const argv = require('yargs').argv;
 const runSequence = require('run-sequence');
 const config = require('./gulp/gulpfile.config');
 const plugins = require('gulp-load-plugins')({
@@ -16,8 +16,8 @@ const plugins = require('gulp-load-plugins')({
 
 /* ******************************************************************** */
 /* CONFIGURE PLUGINS */
-plugins.config = config;
-plugins.del = del;
+plugins.config = config(argv);
+plugins.del = require('del');
 /*/********************************************************************///
 /*///*/
 
@@ -32,6 +32,8 @@ gulp.task('debug:config', getTask('debug', 'config'));
 gulp.task('debug:plugins', getTask('debug', 'plugins'));
 // Styles
 gulp.task('styles:compile', getTask('styles', 'compile'));
+// React (JS/JSX Views)
+gulp.task('js:jsx', getTask('js', 'jsx'));
 // Build
 gulp.task('build:clean', getTask('build', 'clean'));
 gulp.task('build', ['build:clean'], cb => {
