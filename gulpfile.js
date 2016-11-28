@@ -36,10 +36,13 @@ gulp.task('debug:plugins', getTask('debug', 'plugins'));
 gulp.task('styles:compile', getTask('styles', 'compile'));
 // Views (JS/JSX Views/ Html)
 gulp.task('views:jsx:compile', getTask('js', 'jsx'));
+// Lib compile
+gulp.task('lib:compile', getTask('lib', 'compile'));
 // Copy
-gulp.task('copy', ['copy:data', 'copy:html']);
+gulp.task('copy', ['copy:data', 'copy:html', 'copy:vendor']);
 gulp.task('copy:html', getTask('copy', 'html'));
 gulp.task('copy:data', getTask('copy', 'data'));
+gulp.task('copy:vendor', getTask('copy', 'vendor'));
 // Configuration
 gulp.task('config', ['config:app', 'config:projectjson']);
 gulp.task('config:app', getTask('config', 'app'));
@@ -51,7 +54,8 @@ gulp.task('build', cb => {
     runSequence(
         'build:clean', 
         'copy',
-        'config',      
+        'config',
+        'lib:compile',
         'styles:compile', 
         'views:jsx:compile',
         cb
@@ -59,7 +63,11 @@ gulp.task('build', cb => {
 });
 // Watch
 gulp.task('watch', ['build'], () => {
-    gulp.watch(config.paths.src.views.styles, ['styles:compile']);
+    gulp.watch(config.paths.src.views.styles, ['styles:compile']);    
+    gulp.watch(config.paths.src.views.html, ['copy:html']);
+    gulp.watch(config.paths.src.views.react, ['views:jsx:compile']);    
+    gulp.watch(`${config.paths.src.data}/**/*`, ['copy:data']);
+    gulp.watch(`${config.paths.src.data}/config/**/*`, ['config:app']);
 });
 /*/********************************************************************///
 /*///*/

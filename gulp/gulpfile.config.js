@@ -26,7 +26,13 @@ module.exports = argv => {
                     react: './src/views/*.{js,jsx}',
                     styles: './src/views/styles/*.{less,css}' 
                 },
-                lib: './src/lib',            
+                lib: './src/lib/**/*.js',
+                vendors: [
+                    {
+                        source: './node_modules/font-awesome/**/*.{min.css,otf,eot,svg,ttf,woff,woff2}',
+                        name: 'font-awesome'
+                    }                    
+                ],
             },
             dest: {
                 base: './app',
@@ -38,6 +44,7 @@ module.exports = argv => {
                     styles: './app/views/styles' 
                 },
                 lib: './app/lib',
+                vendor: './app/lib/vendor'
             }
         }
     };
