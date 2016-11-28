@@ -1,7 +1,9 @@
 {
-    "build": {
-        "environment": {
-            "name": "production"
+    "app": {
+        "build": {
+            "environment": {
+                "name": "production"
+            }
         }
     },
     "config": {

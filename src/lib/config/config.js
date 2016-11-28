@@ -10,11 +10,11 @@ import configjson from './../../data/config/config.json';
 /* CLASS */
 export default class Config {
     constructor() {
-        this.environmentName = (configjson.build.environment.name || 'development').toLowerCase();
-        this.version = `${packagejson.version}-${configjson.build.number}`;
-        this.commithash = `${configjson.build.commit}`;
+        this.environmentName = (configjson.app.build.environment.name || 'development').toLowerCase();
+        this.version = `${packagejson.version}-${configjson.app.build.number}`;
+        this.commithash = `${configjson.app.build.commit}`;
         this.gitrepo = `${packagejson.repository.url}`;
-        this.githubrepolink = `${packagejson.repository.url}/commit/${configjson.build.commit}`;
+        this.githubrepolink = `${packagejson.repository.url}/commit/${configjson.app.build.commit}`;
         this.applicationName = packagejson.displayName || packagejson.name || '(*undefined)';
         this.configObject = configjson.config || {};
     }

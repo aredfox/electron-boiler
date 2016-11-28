@@ -19,6 +19,7 @@ module.exports = argv => {
             tasks: './gulp/tasks',
             src: {
                 base: './src',
+                config: './src/data/config',
                 views: {
                     html: './src/views/*.html',
                     react: './src/views/*.{js,jsx}',
@@ -28,6 +29,7 @@ module.exports = argv => {
             },
             dest: {
                 base: './app',
+                config: './app/data/config',
                 views: {
                     html: './app/views',
                     react: './app/views',
